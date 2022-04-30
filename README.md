@@ -5,12 +5,12 @@ Airflow와 AWS를 활용하여 주식 일일 배치 데이터 파이프라인 �
 
 
 ## 사용 기술
-Python
-Airflow
-AWS S3
-AWS Glue
-AWS Athena
-Tableau
+Python  
+Airflow  
+AWS S3  
+AWS Glue  
+AWS Athena  
+Tableau  
 
 ## 아키텍쳐
 ![image](https://user-images.githubusercontent.com/64902669/166087604-f49e652f-f756-4e4e-a043-5b9099d314a6.png)
