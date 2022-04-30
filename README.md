@@ -17,10 +17,13 @@ Tableau
 
 
 ## DAG 구조
+### 1. roks_stock_DAG
 ![image](https://user-images.githubusercontent.com/64902669/166092172-18b403ac-a32d-418a-afd7-41ffe49fe5dd.png)
 
+### 2. krx_holiday_DAG
+- 단일 태스크
 
-## 스크린샷
+## 대시보드 예시
 ![image](https://user-images.githubusercontent.com/64902669/166093967-9227fd3f-99c0-4ec3-a0c5-7a4944e050b4.png)
 
 ## 기능
@@ -30,7 +33,12 @@ Tableau
 - 종목별 주가 차트와 거래량 차트 확인 가능 
 
 
-## 각 태스크 리뷰
+## 각 DAG 리뷰
+### roks_stock_DAG
+- start_date : 2022년 4월 1일
+- schedule_interval : UTC 기준 매일 13시(한국 시간: 22시), cron expression : 0 13 * * *
+- catchup : True, 과거 데이터 얻기 위해 backfill True
+
 ### 1. check_holiday_task
 목적 : KOSPI 주식 시장 휴장일 확인
 - S3에 저장된 KOSPI 휴장일 데이터를 가져온 후, 해당 날짜가 휴장일인지 확인
@@ -41,11 +49,20 @@ Tableau
 - KRX 정보데이터 시스템에서 해당 날짜를 기준으로 원하는 데이터를 크롤링
 - 얻은 데이터를 parquet형으로 변환 후 s3에 저장
 
-
 #### 3. glue_TARGET_task (stock, price, trade)
 목적 : s3에 저장된 데이터를 AWS Glue Crawler를 이용하여 크롤링
 - s3에 신규로 저장된 데이터를 glue를 통해 크롤링
 - 데이터 카탈로그 생성 및 아테나 테이블 생성
+
+
+### krx_holiday_DAG
+- start_date : 2018년 1월 1일
+- schedule_interval : UTC 기준 매년 1월 1일 10시 (한국 시간: 19시), cron expression : 0 10 1 1 *
+- 
+#### 1. get_hoilday_task
+목적 : KRX 정보데이터 시스템을 크롤링하여 각 년도 KOSPI 휴장일 데이터 얻고, S3에 저장
+- KRX 정보데이터 시스템에서 년도를 기준으로 휴장일 데이터 얻기
+- 얻은 데이터(excel)를 csv로 변환 후 s3에 저장
 
 
 ## 태블로 시각화
